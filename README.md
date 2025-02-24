@@ -98,7 +98,7 @@
     set Melt_DB = 0b00000000
     Wait 1 ms
 
-Так как адреса позиции курсора имеют не последовательный набор, при переходе на следующую строку, и для общего удобства, так как придется этот параметр писать часто, сделаем подпрограмму:
+Так как адреса позиции курсора имеют не последовательный набор при переходе на следующую строку и для общего удобства, так как придется этот параметр писать часто, сделаем подпрограмму:
 
     Sub MoveCursor (in ln, in ro)
         set Melt_E = true
@@ -155,7 +155,7 @@
     SimbolNum (0x64) //d
     SimbolNum (0x21) //'!'
 
-![WhatsApp Image 2025-02-23 at 20 28 40](https://github.com/user-attachments/assets/bb4537d1-fcb0-4d70-ba8c-6b84715495da)
+![Вывод на экран "Hello World"](https://github.com/user-attachments/assets/bb4537d1-fcb0-4d70-ba8c-6b84715495da)
 
 
 Новый символ
@@ -230,4 +230,4 @@
     SimbolNum (0x02) //третий
     SimbolNum (0x03) //четвертый
     
-![WhatsApp Image 2025-02-23 at 20 57 32](https://github.com/user-attachments/assets/443fb228-6967-4c73-8347-fbd792b893cf)
+![Вывод на экран дополнительных символов](https://github.com/user-attachments/assets/443fb228-6967-4c73-8347-fbd792b893cf)
