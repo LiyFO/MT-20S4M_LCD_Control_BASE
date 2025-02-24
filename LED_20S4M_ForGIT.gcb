@@ -1,0 +1,207 @@
+#chip mega162, 16
+
+//БАЗА
+#define Melt_AO PortD.4
+#define Melt_RW PortD.5
+#define Melt_E PortD.6
+#define Melt_LED PortE.1
+#define Melt_DB PortC
+
+Dir Melt_AO Out
+Dir Melt_RW Out
+Dir Melt_E Out
+Dir Melt_LED Out
+
+Dir Melt_DB.0 out
+Dir Melt_DB.1 out
+Dir Melt_DB.2 out
+Dir Melt_DB.3 out
+Dir Melt_DB.4 out
+Dir Melt_DB.5 out
+Dir Melt_DB.6 out
+Dir Melt_DB.7 out
+
+//первоначальные установки портов
+set Melt_DB = 0b00000000
+set Melt_AO = false
+set Melt_RW = false
+set Melt_E = false
+set Melt_LED = false
+
+//инициализация
+set Melt_E = true
+set Melt_DB = 0b00110000
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 40 us
+
+set Melt_E = true
+set Melt_DB = 0b00110000
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 40 us
+
+set Melt_E = true
+set Melt_DB = 0b00110000
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 40 us
+
+
+set Melt_E = true
+set Melt_DB = 0b00111000
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 1000 us
+
+set Melt_E = true
+set Melt_DB = 0b00001000
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 1000 us
+
+set Melt_E = true
+set Melt_DB = 0b00000001
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 1000 us
+
+set Melt_E = true
+set Melt_DB = 0b00000110
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 1000 us
+
+//Выбор курсора
+set Melt_E = true
+set Melt_DB = 0b00001100
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 1000 us
+
+//Установка курсора в позицию
+/*
+set Melt_E = true
+set Melt_DB = 0b11000000 //<<задается позиция курсора
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 1 ms
+*/
+
+
+Sub MoveCursor (in ln, in ro)
+    set Melt_E = true
+    Dim DB as Byte
+    if ln = 1 and ro => 0 and ro <= 19 then
+        set DB = 0b10000000
+        set Melt_DB = DB + ro
+    end if
+
+    if ln = 2 and ro => 0 and ro <= 19 then
+        set DB = 0b11000000
+        set Melt_DB = DB + ro
+    end if
+
+    if ln = 3 and ro => 0 and ro <= 19 then
+        set DB = 0b10010100
+        set Melt_DB = DB + ro
+    end if
+
+    if ln = 4 and ro => 0 and ro <= 19 then
+        set DB = 0b11010100
+        set Melt_DB = DB + ro
+    end if
+  set Melt_E = false
+  set Melt_DB = 0b00000000
+  Wait 1 ms
+End Sub
+
+//Вывод символа
+Sub SimbolNum (in num as byte)
+  set Melt_AO = true
+  set Melt_E = true
+  set Melt_DB = num //<<Установка значения
+  set Melt_E = false
+  set Melt_DB = 0b00000000 
+  set Melt_AO = false
+  Wait 2 ms
+End sub
+
+MoveCursor (2, 4)
+SimbolNum (0x48) //H
+SimbolNum (0x65) //e
+SimbolNum (0x6C) //l
+SimbolNum (0x6C) //l
+SimbolNum (0x6F) //o
+SimbolNum (0x20) //Space
+SimbolNum (0x57) //W
+SimbolNum (0x6F) //o
+SimbolNum (0x72) //r
+SimbolNum (0x6C) //l
+SimbolNum (0x64) //d
+SimbolNum (0x21) //'!'
+
+//Задание начального адреса для рисования нового символа
+Sub NewSimbAdr (in adr)
+set Melt_E = true
+set Melt_DB = adr
+set Melt_E = false
+set Melt_DB = 0b00000000
+Wait 4 ms
+end Sub
+
+//Рисуем новый символ
+sub NewSimb (in Write)
+set Melt_AO = true
+set Melt_E = true
+set Melt_DB = Write
+set Melt_E = false
+set Melt_DB = 0b00000000
+set Melt_AO = false
+Wait 100 us
+end Sub
+
+NewSimbAdr (0b01000000)
+//Первый
+NewSimb (0b00000100)
+NewSimb (0b00000100)
+NewSimb (0b00000101)
+NewSimb (0b00000110)
+NewSimb (0b00001100)
+NewSimb (0b00010100)
+NewSimb (0b00000100)
+NewSimb (0b00000100)
+//Второй
+NewSimb (0b00011111)
+NewSimb (0b00000100)
+NewSimb (0b00000100)
+NewSimb (0b00000100)
+NewSimb (0b00011111)
+NewSimb (0b00011111)
+NewSimb (0b00011111)
+NewSimb (0b00011111)
+//Третий
+NewSimb (0b00011111)
+NewSimb (0b00010001)
+NewSimb (0b00010001)
+NewSimb (0b00010001)
+NewSimb (0b00000100)
+NewSimb (0b00001010)
+NewSimb (0b00010001)
+NewSimb (0b00001010)
+//Четвертый
+NewSimb (0b00001010)
+NewSimb (0b00010101)
+NewSimb (0b00001010)
+NewSimb (0b00000100)
+NewSimb (0b00011011)
+NewSimb (0b00010101)
+NewSimb (0b00001010)
+NewSimb (0b00010101)
+
+//Выводим на экран
+MoveCursor (3, 8)
+SimbolNum (0x00) //первый
+SimbolNum (0x01) //второй
+SimbolNum (0x02) //третий
+SimbolNum (0x03) //четвертый
